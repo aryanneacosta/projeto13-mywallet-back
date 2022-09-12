@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import joi from 'joi';
-import db from '../db.js'
+import db from '../database/db.js'
 
 const transactionSchema = joi.object({
     value: joi.number().required(),

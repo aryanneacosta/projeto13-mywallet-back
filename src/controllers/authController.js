@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
 import joi from 'joi';
-import db from '../db.js'
+import db from '../database/db.js'
 
 const signupSchema = joi.object({
     name: joi.string().required(),
