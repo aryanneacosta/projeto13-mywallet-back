@@ -12,6 +12,7 @@ export async function wallet(req, res) {
 
     try {
         const session = res.locals.session;
+        const { userId } = res.locals.session;
 
         const user = await db.collection('users').findOne({
             _id: session.userId
@@ -24,11 +25,10 @@ export async function wallet(req, res) {
         delete user.password;
         delete user.passwordconf;
 
-        const allTransactions = await db.collection('transactions').find(user.userId).toArray();
+        const allTransactions = await db.collection('transactions').find({ userId }).toArray();
         res.send(allTransactions.map(value => ({
             ...value,
             _id: undefined,
-            userId: undefined
         })));
 
     } catch (error) {
