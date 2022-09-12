@@ -9,19 +9,9 @@ const transactionSchema = joi.object({
 });
 
 export async function wallet(req, res) {
-    const { authorization } = req.headers;
-    const token = authorization?.replace('Bearer ', '');
-
-    if (!token) {
-        return res.sendStatus(401);
-    }
 
     try {
-        const session = await db.collection('sessions').findOne({ token });
-
-        if (!session) {
-            return res.sendStatus(401);
-        }
+        const session = res.locals.session;
 
         const user = await db.collection('users').findOne({
             _id: session.userId
@@ -41,22 +31,15 @@ export async function wallet(req, res) {
             userId: undefined
         })));
 
-
     } catch (error) {
         console.log(error);
     }
 };
 
 export async function transaction(req, res) {
-    const { authorization } = req.headers;
-    const token = authorization?.replace('Bearer ', '');
     const transactionReceived = req.body;
     const { value, description, type } = req.body;
     const date = dayjs().format('DD/MM');
-
-    if (!token) {
-        return res.sendStatus(401);
-    }
 
     try {
         const { error } = transactionSchema.validate(transactionReceived);
@@ -65,12 +48,8 @@ export async function transaction(req, res) {
             return res.sendStatus(422);
         }
 
-        const session = await db.collection('sessions').findOne({ token });
+        const session = res.locals.session;
         const userId = session.userId;
-
-        if (!session) {
-            return res.sendStatus(401);
-        }
 
         await db.collection('transactions').insertOne({
             date,

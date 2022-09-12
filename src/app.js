@@ -1,7 +1,7 @@
 import express, { json } from "express";
 import cors from 'cors';
 import userRouter from "./routers/userRouter.js";
-import transactionRouter from './routers/transactionsRouter.js'
+import transactionRouter from './routers/transactionRouter.js'
 
 const server = express();
 server.use(cors());
